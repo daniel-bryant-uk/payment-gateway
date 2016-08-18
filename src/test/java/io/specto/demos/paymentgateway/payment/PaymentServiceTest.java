@@ -60,4 +60,15 @@ public class PaymentServiceTest {
 
         assertThat(paymentService.getCumulativeTxnValue(), is(8.0d));
     }
+
+    @Test
+    public void cumulativePayersIsCorrect() throws TxnNotFoundException, RefundExceedsExecuteValueException {
+        UUID txnId = paymentService.execute(payer, payee, 4.5d);
+        UUID refundTxnId = paymentService.refund(txnId, -2.5d);
+        UUID txnId2 = paymentService.execute(payer, payee, 6.0d);
+
+        List<String> names = Arrays.asList("benji","benji");
+
+        assertThat(paymentService.getCumulativePayerNames(), is(names));
+    }
 }
